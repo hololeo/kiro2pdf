@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 import os
 import sys
@@ -120,6 +121,21 @@ def main():
         help="One or more paths to input Markdown files (.md).",
     )
     parser.add_argument(
+        "--todo",
+        action="store_true",
+        help="Generate PDF for the 'tasks.md' spec file.",
+    )
+    parser.add_argument(
+        "--requirements",
+        action="store_true",
+        help="Generate PDF for the 'requirements.md' spec file.",
+    )
+    parser.add_argument(
+        "--design",
+        action="store_true",
+        help="Generate PDF for the 'design.md' spec file.",
+    )
+    parser.add_argument(
         "-o",
         "--output",
         required=False, # Not required for the new default behavior
@@ -148,7 +164,33 @@ def main():
 
     args = parser.parse_args()
 
-    # Check if input files are provided when not using the default behavior
+    # Handle specific flags: --todo, --requirements, --design
+    specific_requests_made = False
+    if args.todo:
+        specific_requests_made = True
+        md_file = os.path.abspath(os.path.join(".kiro", "specs", "tasks.md"))
+        output_pdf = "kiro_todo.pdf"
+        print(f"Generating {output_pdf} from {md_file}...")
+        create_pdf_from_markdown_files([md_file], output_pdf, args.toc_level, args.optimize, args.css)
+
+    if args.requirements:
+        specific_requests_made = True
+        md_file = os.path.abspath(os.path.join(".kiro", "specs", "requirements.md"))
+        output_pdf = "kiro_requirements.pdf"
+        print(f"Generating {output_pdf} from {md_file}...")
+        create_pdf_from_markdown_files([md_file], output_pdf, args.toc_level, args.optimize, args.css)
+
+    if args.design:
+        specific_requests_made = True
+        md_file = os.path.abspath(os.path.join(".kiro", "specs", "design.md"))
+        output_pdf = "kiro_design.pdf"
+        print(f"Generating {output_pdf} from {md_file}...")
+        create_pdf_from_markdown_files([md_file], output_pdf, args.toc_level, args.optimize, args.css)
+
+    if specific_requests_made:
+        return # Exit after handling specific requests
+
+    # Existing logic for general input_files and output
     if not args.input_files:
         parser.print_help()
         return
