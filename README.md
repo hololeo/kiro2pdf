@@ -6,6 +6,7 @@ A command-line utility to convert one or more Kiro markdown spec files into a si
 
 -   **Combine Multiple Files**: Merge several Markdown files into one PDF.
 -   **Automatic Table of Contents**: Each input file gets its own top-level entry in the PDF's TOC.
+-   **Default Behavior**: If run without arguments, the script will search for markdown files in the `.kiro/specs` directory and offer to create a PDF from them.
 
 ## Prerequisites
 
@@ -17,7 +18,15 @@ pip install markdown-pdf
 
 ## Usage
 
-Run the script from your terminal, providing the input Markdown files and specifying an output file.
+### Default Behavior
+
+If you have your markdown files in a `.kiro/specs` directory, you can run the script without any arguments:
+
+```bash
+python kiro2pdf.py
+```
+
+The script will find the files and ask for confirmation before creating the PDF.
 
 ### Basic Example
 
