@@ -44,3 +44,9 @@ This command combines `requirement.md` and `design.md` into a single `output.pdf
 ```bash
 python kiro2pdf.py requirements.md design.md -o output.pdf
 ```
+
+
+### Screenshot
+
+<img width="1302" height="745" alt="Screenshot 2025-07-19 at 11 39 25 AM" src="https://github.com/user-attachments/assets/ae8be714-027e-48ee-9118-2ff889d442f8" />
+
