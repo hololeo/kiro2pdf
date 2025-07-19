@@ -1,5 +1,7 @@
 import argparse
 import os
+import sys
+import glob
 from markdown_pdf import MarkdownPdf, Section
 
 def create_pdf_from_markdown_files(
@@ -83,19 +85,44 @@ def main():
     """
     Main function to parse command-line arguments and initiate PDF creation.
     """
+    # Check for the new default behavior: no arguments provided
+    if len(sys.argv) == 1:
+        kiro_dir = ".kiro/specs"
+        if os.path.isdir(kiro_dir):
+            md_files = glob.glob(os.path.join(kiro_dir, "*.md"))
+            if md_files:
+                print("Found the following spec files:")
+                for f in md_files:
+                    print(f"  - {f}")
+                
+                user_input = input("Create PDF from these files? (y/n): ").lower()
+                if user_input == 'y':
+                    output_file = "theplan.pdf"
+                    print(f"Generating {output_file}...")
+                    # Get absolute paths for the files
+                    abs_md_files = [os.path.abspath(f) for f in md_files]
+                    create_pdf_from_markdown_files(abs_md_files, output_file)
+                    print("Done.")
+                else:
+                    print("To generate the PDF manually, run the following command:")
+                    # Get absolute paths for the files
+                    abs_md_files = [os.path.abspath(f) for f in md_files]
+                    print(f"python {sys.argv[0]} {' '.join(abs_md_files)} -o theplan.pdf")
+                return
+
     parser = argparse.ArgumentParser(
         description="Convert one or more Markdown files to a single PDF, "
                     "with each input file appearing as a separate section in the PDF's Table of Contents."
     )
     parser.add_argument(
         "input_files",
-        nargs="+",  # Requires one or more arguments
+        nargs="*",  # Allow zero or more arguments
         help="One or more paths to input Markdown files (.md).",
     )
     parser.add_argument(
         "-o",
         "--output",
-        required=True,
+        required=False, # Not required for the new default behavior
         help="The path for the output PDF file (e.g., output.pdf).",
     )
     parser.add_argument(
@@ -120,6 +147,16 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Check if input files are provided when not using the default behavior
+    if not args.input_files:
+        parser.print_help()
+        return
+
+    if not args.output:
+        print("Error: The --output argument is required when providing input files.")
+        parser.print_help()
+        return
 
     create_pdf_from_markdown_files(
         input_files=args.input_files,
