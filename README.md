@@ -28,6 +28,15 @@ python kiro2pdf.py
 
 The script will find the files and ask for confirmation before creating the PDF.
 
+### Specific Document Generation
+
+You can generate specific documents (todo, requirements, design) directly from the `.kiro/specs/` directory using dedicated flags. This will create individual PDF files named `kiro_todo.pdf`, `kiro_requirements.pdf`, and `kiro_design.pdf` respectively.
+
+```bash
+kiro2pdf --todo
+kiro2pdf --requirements --design
+```
+
 ### Basic Example
 
 This command combines `requirement.md` and `design.md` into a single `output.pdf`.
